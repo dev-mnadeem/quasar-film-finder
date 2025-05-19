@@ -1,8 +1,8 @@
 /**
  * Every tunable in the app, read once from `import.meta.env`.
  *
- * Nothing else in `src/` touches `import.meta.env` directly, so the set of knobs a
- * reviewer has to learn is exactly the set documented in `.env.example`.
+ * Nothing else in `src/` touches `import.meta.env` directly, so the knobs that
+ * exist are exactly the ones documented in `.env.example`.
  */
 
 /** Delay between the last keystroke and the search request. */
