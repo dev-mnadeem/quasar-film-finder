@@ -7,9 +7,9 @@ is fetched. The search lives in the URL, so a result page is a link you can send
 ![Search results for "the": eleven matches across two pages, rendered as a poster grid](docs/screenshots/search-results.png)
 
 It ships with a bundled catalogue of 26 invented titles and 24 generated posters, so
-`npm install && npm run dev` gives you a working app with **no API key and no network**. Point it
-at the public HackerRank jsonmock endpoint with one environment variable when you want the real
-thing.
+`npm install && npm run dev` gives you a working app with **no API key and no network** (the
+fonts are bundled too). Point it at the public HackerRank jsonmock endpoint with one environment
+variable when you want a live source.
 
 ---
 
@@ -31,7 +31,7 @@ stateDiagram-v2
     Loading --> Dropped: a newer search already took ticket N+1
     Success --> Loading: page link clicked
     Success --> Parsing: phrase changes
-    Error --> Parsing: Retry pressed
+    Error --> Loading: Retry pressed, same page
     Success --> Idle: field cleared
     Error --> Idle: field cleared
     Dropped --> [*]
@@ -44,14 +44,18 @@ The ticket matters. Aborting an `AbortController` cancels a request that is stil
 it cannot cancel one whose `fetch` has already resolved — that one carries on into `.json()`, or
 into a `503` throw, and lands after the newer request has already painted. So every call to
 `run()` takes a number, and both the success path and the failure path refuse to touch the state
-unless their number is still current. Two regression tests pin this down, one for a late success
-and one for a late failure, in `src/stores/__tests__/moviesSearch.spec.ts`.
+unless their number is still current. Parsing takes a ticket of its own for the same reason: a
+remote phrase parser can answer out of order, and a slow parse of an old phrase must not replace
+the intent of the newer one. Regression tests for a late success, a late failure and a late parse
+live in `src/stores/__tests__/moviesSearch.spec.ts`. Retry repeats the request for the page that
+failed, so the grid and the `?page=` in the URL never disagree.
 
 The URL being the source of truth has the same flavour of subtlety: opening `/?q=the&page=2`
 fills the search box from the URL, which looks to the debounce exactly like typing. The debounced
 callback therefore compares its value against the current query string and navigates only when
-they differ, or a deep link would bounce back to page 1 after 350 ms. `e2e/search.spec.ts` waits
-out the debounce and asserts the page number survives.
+they differ, or a deep link would bounce back to page 1 after 350 ms. The page named in the URL
+is requested directly, so a deep link costs one request rather than page 1 followed by a jump.
+`e2e/search.spec.ts` waits out the debounce and asserts the page number survives.
 
 ## Reading a phrase instead of a keyword
 
@@ -141,7 +145,7 @@ rather than only in a test.
 
 ## Run it
 
-Node `^20.19.0 || >=22.12.0`.
+Node 22.12 or newer (`.nvmrc` says 22).
 
 ```sh
 npm install
@@ -150,15 +154,15 @@ npm run dev          # http://localhost:7211
 
 That is the whole setup. No key, no `.env`, no network.
 
-| Task                   | Command                       |
-| ---------------------- | ----------------------------- |
-| Dev server             | `npm run dev` (port 7211)     |
-| Production build       | `npm run build`               |
-| Preview the build      | `npm run preview` (port 7212) |
-| Types                  | `npm run type-check`          |
-| Lint (oxlint + ESLint) | `npm run lint`                |
-| Format                 | `npm run format`              |
-| Regenerate posters     | `npm run posters`             |
+| Task                   | Command                        |
+| ---------------------- | ------------------------------ |
+| Dev server             | `npm run dev` (port 7211)      |
+| Production build       | `npm run build`                |
+| Preview the build      | `npm run preview` (port 7212)  |
+| Types                  | `npm run type-check`           |
+| Lint (oxlint + ESLint) | `npm run lint` (applies fixes) |
+| Format                 | `npm run format`               |
+| Regenerate posters     | `npm run posters`              |
 
 Copy `.env.example` to `.env` to change anything:
 
@@ -181,12 +185,14 @@ VITE_MOVIES_PROVIDER=jsonmock npm run dev
 
 ```sh
 npx playwright install chromium   # once
-npm run test:unit                 # 78 tests in 9 files
+npm run test:unit                 # 82 tests in 9 files
 npm run test:e2e                  # 16 tests
 npm test                          # both
 ```
 
-Observed on the last run: **78 unit tests passed**, **16 end-to-end tests passed**.
+`@playwright/test` is pinned to an exact version so the browsers it expects match the
+`mcr.microsoft.com/playwright:v1.64.1-noble` image, which is a convenient way to run the
+end-to-end suite without installing browsers locally.
 
 If Playwright reports `Executable doesn't exist`, the browser download was skipped — an
 `ignore-scripts=true` in your npm config will do that silently. `npx playwright install chromium`
@@ -212,18 +218,40 @@ to its own:
 docker compose up --build       # http://localhost:7211
 ```
 
-Multi-stage: `node:22-alpine` builds, `nginxinc/nginx-unprivileged` serves the static output as
-UID 101 on port 8080, with a read-only root filesystem and `no-new-privileges`. `docker/nginx.conf`
-adds the history-mode fallback (`try_files $uri $uri/ /index.html`) that a Vue Router SPA needs,
-plus long cache headers for the hashed assets and the posters. Because Vite inlines the source
-choice at build time, it is a build argument:
+Multi-stage: `node:22-alpine` builds, `nginxinc/nginx-unprivileged:1.30-alpine` serves the static
+output as UID 101 on port 8080, with a read-only root filesystem and `no-new-privileges`.
+`docker/nginx.conf` adds the history-mode fallback (`try_files $uri $uri/ /index.html`) that a Vue
+Router SPA needs, a year of `immutable` caching for hashed assets, 30 days for posters, and
+`no-cache` on `index.html` so a redeploy is picked up on the next load. Every response carries
+`X-Content-Type-Options`, `Referrer-Policy` and `X-Frame-Options`; they are repeated in each
+`location` because nginx drops inherited `add_header` lines wherever a block sets its own.
+
+Because Vite inlines the source choice at build time, it is a build argument:
 
 ```sh
 docker compose build --build-arg VITE_MOVIES_PROVIDER=jsonmock
 ```
 
-`docker compose config` parses. **The image has not been built or booted** — Docker was switched
-off on the machine this was last worked on, so treat the Dockerfile as reviewed, not as verified.
+The compose stack builds from a clean checkout and reports `healthy`; `/`, `/movie/fx0001` and
+`/?q=night` all return the app with the headers above.
+
+The lockfile lists the native builds of rolldown, lightningcss and oxlint for every platform, so
+`npm ci` works the same on macOS, glibc Linux and the Alpine build stage. If you regenerate it,
+use npm 11 or newer; older npm versions record only the platform you ran them on.
+
+## Look and feel
+
+The palette borrows from a repertory cinema programme: paper background, projection-booth ink
+for the header, marquee red for actions and brass for ratings. Headings are Fraunces and body
+text is IBM Plex Sans, both installed from `@fontsource` so nothing is fetched from a font CDN.
+The tokens live in `src/styles/theme.scss`, and `src/main.ts` hands the same colours to
+Quasar's brand config so its inputs and buttons match. Muted text clears WCAG AA on the paper
+background, there is a skip link to the main region, errors are announced with `role="alert"`,
+and the card hover lift is switched off under `prefers-reduced-motion`.
+
+| Phone, results                                                                        | Phone, detail                                                                   |
+| ------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------- |
+| ![Four results for "night" in a two-column grid](docs/screenshots/mobile-results.png) | ![Night Harbour's detail screen on a phone](docs/screenshots/mobile-detail.png) |
 
 ## Files worth opening
 
@@ -235,6 +263,7 @@ off on the machine this was last worked on, so treat the Dockerfile as reviewed,
 | `src/api/providers/fixtureProvider.ts` | `searchCatalog` is pure and totally ordered          |
 | `src/composables/useDebouncedWatch.ts` | debounce with `cancel` and `flush`                   |
 | `src/config/appConfig.ts`              | every tunable in the app                             |
+| `src/styles/theme.scss`                | palette, type and the shared notice styles           |
 | `scripts/generate-posters.mjs`         | how the artwork is produced                          |
 
 ## What is deliberately missing
@@ -248,3 +277,7 @@ off on the machine this was last worked on, so treat the Dockerfile as reviewed,
   by source, and tripling them again by browser buys little here.
 - **The remote phrase parser has no reference server.** Its client, validation and fallback are
   tested against a stubbed `fetch`, but no endpoint implementation ships here.
+
+## Licence
+
+MIT, see [LICENSE](LICENSE).
