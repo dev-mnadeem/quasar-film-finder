@@ -1,0 +1,17 @@
+services:
+  web:
+    build:
+      context: .
+      args:
+        # fixture = bundled catalogue, no network. jsonmock = live HackerRank endpoint.
+        VITE_MOVIES_PROVIDER: ${VITE_MOVIES_PROVIDER:-fixture}
+        VITE_AI_QUERY_ENDPOINT: ${VITE_AI_QUERY_ENDPOINT:-}
+    image: film-finder:local
+    ports:
+      - '${WEB_PORT:-7211}:8080'
+    restart: unless-stopped
+    read_only: true
+    tmpfs:
+      - /tmp
+    security_opt:
+      - no-new-privileges:true

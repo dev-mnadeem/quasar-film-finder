@@ -1,0 +1,241 @@
+{
+  "$comment": "Invented titles. This catalogue exists so the app, the unit tests and the e2e tests run with no network and no API key. Ratings and runtimes are fixture values, not claims about real films.",
+  "movies": [
+    {
+      "id": "fx0001",
+      "title": "The Last Signal",
+      "year": 1998,
+      "rating": 8.1,
+      "runtimeMinutes": 124,
+      "genres": ["Sci-Fi", "Drama"],
+      "overview": "A radio astronomer spends eleven years chasing a repeating pulse that only she can hear, and has to decide what it costs to be believed."
+    },
+    {
+      "id": "fx0002",
+      "title": "Night Harbour",
+      "year": 1994,
+      "rating": 7.4,
+      "runtimeMinutes": 108,
+      "genres": ["Thriller", "Drama"],
+      "overview": "Two dock inspectors on the graveyard shift find a container that is not on any manifest, and spend one night deciding whether to open it."
+    },
+    {
+      "id": "fx0003",
+      "title": "Starfall Country",
+      "year": 1991,
+      "rating": 7.9,
+      "runtimeMinutes": 141,
+      "genres": ["Sci-Fi", "Action"],
+      "overview": "When debris from a failed orbital station rains over a farming county, the salvage rights turn neighbours into rivals."
+    },
+    {
+      "id": "fx0004",
+      "title": "A Quiet Arithmetic",
+      "year": 2011,
+      "rating": 8.4,
+      "runtimeMinutes": 97,
+      "genres": ["Drama"],
+      "overview": "A supply teacher discovers that the school's best mathematician is the caretaker, and that he has excellent reasons for staying invisible."
+    },
+    {
+      "id": "fx0005",
+      "title": "The Cartographer's Wife",
+      "year": 2003,
+      "rating": 7.2,
+      "runtimeMinutes": 131,
+      "genres": ["Romance", "Drama"],
+      "overview": "She redraws the coastline he has spent thirty years measuring, and neither of them can agree on where the land ends."
+    },
+    {
+      "id": "fx0006",
+      "title": "Orbit Nine",
+      "year": 1996,
+      "rating": 6.8,
+      "runtimeMinutes": 115,
+      "genres": ["Sci-Fi", "Thriller"],
+      "overview": "The ninth crew rotation arrives to find the station spotless, fully stocked, and entirely empty."
+    },
+    {
+      "id": "fx0007",
+      "title": "Paper Cities",
+      "year": 2019,
+      "rating": 7.7,
+      "runtimeMinutes": 88,
+      "genres": ["Documentary"],
+      "overview": "Mapmakers have hidden fake towns in their atlases for a century. Some of those towns eventually got built."
+    },
+    {
+      "id": "fx0008",
+      "title": "The Long Commute",
+      "year": 2016,
+      "rating": 7.0,
+      "runtimeMinutes": 101,
+      "genres": ["Comedy", "Drama"],
+      "overview": "Four strangers share the 06:12 to the coast every weekday for nine years and never once introduce themselves."
+    },
+    {
+      "id": "fx0009",
+      "title": "Glasshouse Winter",
+      "year": 2007,
+      "rating": 7.5,
+      "runtimeMinutes": 119,
+      "genres": ["Drama", "Thriller"],
+      "overview": "A botanist keeps a failing greenhouse alive through the coldest winter on record, mostly to avoid going home."
+    },
+    {
+      "id": "fx0010",
+      "title": "Night Shift Symphony",
+      "year": 2021,
+      "rating": 8.0,
+      "runtimeMinutes": 94,
+      "genres": ["Animation", "Drama"],
+      "overview": "A hand-drawn film about the sounds a hospital makes between two and five in the morning."
+    },
+    {
+      "id": "fx0011",
+      "title": "The Salt Road",
+      "year": 1987,
+      "rating": 7.6,
+      "runtimeMinutes": 152,
+      "genres": ["Action", "Drama"],
+      "overview": "A caravan carrying the last legal salt shipment crosses a border that closes behind them."
+    },
+    {
+      "id": "fx0012",
+      "title": "Second Star",
+      "year": 2013,
+      "rating": 6.4,
+      "runtimeMinutes": 106,
+      "genres": ["Romance", "Comedy"],
+      "overview": "An understudy is finally given the part on the night the theatre is condemned."
+    },
+    {
+      "id": "fx0013",
+      "title": "The Inheritance Protocol",
+      "year": 2018,
+      "rating": 7.3,
+      "runtimeMinutes": 127,
+      "genres": ["Thriller", "Sci-Fi"],
+      "overview": "A will can only be executed once its author's digital estate agrees that she is really dead."
+    },
+    {
+      "id": "fx0014",
+      "title": "Hollow Tide",
+      "year": 2002,
+      "rating": 6.1,
+      "runtimeMinutes": 92,
+      "genres": ["Horror"],
+      "overview": "The tide on this stretch of coast has gone out four hours early every day since the lighthouse was automated."
+    },
+    {
+      "id": "fx0015",
+      "title": "Field Notes from Nowhere",
+      "year": 2009,
+      "rating": 7.8,
+      "runtimeMinutes": 76,
+      "genres": ["Documentary"],
+      "overview": "Three seasons with the last full-time surveyor of a country that is being redrawn around him."
+    },
+    {
+      "id": "fx0016",
+      "title": "The Understudy Star",
+      "year": 1979,
+      "rating": 7.1,
+      "runtimeMinutes": 113,
+      "genres": ["Drama", "Romance"],
+      "overview": "A stage actress agrees to play herself in a film about her own worst year."
+    },
+    {
+      "id": "fx0017",
+      "title": "Cold Open",
+      "year": 2015,
+      "rating": 6.9,
+      "runtimeMinutes": 85,
+      "genres": ["Comedy"],
+      "overview": "A sketch show is broadcast live from a studio that is being repossessed during the broadcast."
+    },
+    {
+      "id": "fx0018",
+      "title": "The Weight of Rain",
+      "year": 1993,
+      "rating": 8.2,
+      "runtimeMinutes": 138,
+      "genres": ["Drama"],
+      "overview": "A reservoir engineer must flood the valley she grew up in, and has six weeks to move the cemetery."
+    },
+    {
+      "id": "fx0019",
+      "title": "Starling Protocol",
+      "year": 2023,
+      "rating": 7.4,
+      "runtimeMinutes": 118,
+      "genres": ["Sci-Fi", "Thriller"],
+      "overview": "A flock-behaviour model built to route drones starts producing the same answer no matter what it is asked."
+    },
+    {
+      "id": "fx0020",
+      "title": "Midnight at the Exchange",
+      "year": 2005,
+      "rating": 6.6,
+      "runtimeMinutes": 99,
+      "genres": ["Thriller"],
+      "overview": "A clearing house has fifty-two minutes to find eleven million that exists in two places at once."
+    },
+    {
+      "id": "fx0021",
+      "title": "The Quiet Car",
+      "year": 2020,
+      "rating": 7.2,
+      "runtimeMinutes": 90,
+      "genres": ["Comedy", "Drama"],
+      "overview": "Nobody on the 18:40 has spoken in four years, and the new conductor intends to change that."
+    },
+    {
+      "id": "fx0022",
+      "title": "Ashfall",
+      "year": 1984,
+      "rating": 7.0,
+      "runtimeMinutes": 121,
+      "genres": ["Action", "Horror"],
+      "overview": "A volcanologist's evacuation order is overruled by a tourist board with a very good quarter behind it."
+    },
+    {
+      "id": "fx0023",
+      "title": "The Night Gardener",
+      "year": 2012,
+      "rating": 7.9,
+      "runtimeMinutes": 104,
+      "genres": ["Drama", "Animation"],
+      "overview": "Somebody is planting the city's roundabouts between three and four every morning, and the council wants it stopped.",
+      "posterPath": null
+    },
+    {
+      "id": "fx0024",
+      "title": "Deadline Star",
+      "year": 1999,
+      "rating": 6.3,
+      "runtimeMinutes": 96,
+      "genres": ["Comedy", "Thriller"],
+      "overview": "A celebrity obituary is published eleven years early, and its subject decides to live up to it.",
+      "posterPath": null
+    },
+    {
+      "id": "fx0025",
+      "title": "Low Orbit Lullaby",
+      "year": 2017,
+      "rating": 8.3,
+      "runtimeMinutes": 110,
+      "genres": ["Sci-Fi", "Romance"],
+      "overview": "Two ground controllers on opposite sides of the planet talk each other through a decade of night shifts."
+    },
+    {
+      "id": "fx0026",
+      "title": "The Understory",
+      "year": 2022,
+      "rating": 7.6,
+      "runtimeMinutes": 83,
+      "genres": ["Documentary", "Drama"],
+      "overview": "Everything that happens in the two metres of forest nobody photographs."
+    }
+  ]
+}
