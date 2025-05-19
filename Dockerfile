@@ -20,7 +20,7 @@ RUN npm run build-only
 
 # ---------- serve ----------
 # nginx-unprivileged runs as UID 101 and listens on 8080: no root in the final image.
-FROM nginxinc/nginx-unprivileged:1.27-alpine AS runtime
+FROM nginxinc/nginx-unprivileged:1.30-alpine AS runtime
 
 COPY docker/nginx.conf /etc/nginx/conf.d/default.conf
 COPY --from=build /app/dist /usr/share/nginx/html

@@ -1,6 +1,6 @@
 // TSConfig for modules that run in Node.js environment via either transpilation or type-stripping.
 {
-  "extends": "@tsconfig/node24/tsconfig.json",
+  "extends": "@tsconfig/node22/tsconfig.json",
   "include": [
     "vite.config.*",
     "vitest.config.*",
@@ -19,6 +19,8 @@
 
     // Disable emitting output during `vue-tsc --build`, which is used for type-checking only.
     "noEmit": true,
+    // Lets vitest.config.ts import vite.config.ts by its real name, as Vite's native config loader requires.
+    "allowImportingTsExtensions": true,
 
     // `vue-tsc --build` produces a .tsbuildinfo file for incremental type-checking.
     // Specified here to keep it out of the root directory.
