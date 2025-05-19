@@ -65,7 +65,9 @@ async function applyRoute(): Promise<void> {
     return
   }
   if (target.q !== phrase.value) {
-    await store.search(target.q)
+    // One request for the page the URL names, rather than page 1 and then a jump.
+    await store.search(target.q, target.page)
+    return
   }
   if (target.page !== page.value) {
     await store.setPage(target.page)

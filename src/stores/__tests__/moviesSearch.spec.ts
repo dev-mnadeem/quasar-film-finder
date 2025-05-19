@@ -162,6 +162,20 @@ describe('useMoviesSearchStore', () => {
     expect(store.movies[0]?.title).toBe('Second')
   })
 
+  it('fetches a deep-linked page directly, without loading page 1 first', async () => {
+    const search = vi.fn<SearchFn>(async (query) =>
+      pageOf(['Second'], { page: query.page, total: 11, totalPages: 2 }),
+    )
+    const store = useMoviesSearchStore()
+    store.useSource(stubProvider(search))
+
+    await store.search('the', 2)
+
+    expect(search).toHaveBeenCalledTimes(1)
+    expect(search.mock.calls[0]?.[0]?.page).toBe(2)
+    expect(store.page).toBe(2)
+  })
+
   it('ignores setPage without a query, and setPage to the current page', async () => {
     const search = vi.fn<SearchFn>(async () => pageOf(['Alpha'], { total: 11, totalPages: 2 }))
     const store = useMoviesSearchStore()

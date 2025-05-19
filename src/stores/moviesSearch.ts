@@ -133,8 +133,8 @@ export const useMoviesSearchStore = defineStore('moviesSearch', () => {
     }
   }
 
-  /** Parse a raw phrase, then fetch its first page. */
-  async function search(rawPhrase: string): Promise<void> {
+  /** Parse a raw phrase, then fetch `startPage` (a deep link may ask for page 2 or later). */
+  async function search(rawPhrase: string, startPage = 1): Promise<void> {
     const text = rawPhrase.trim()
     const ticket = (phraseId += 1)
     phrase.value = text
@@ -143,10 +143,11 @@ export const useMoviesSearchStore = defineStore('moviesSearch', () => {
       return
     }
 
-    const parsed = await queryProvider.value.parse(text, 1)
+    const firstPage = Number.isFinite(startPage) && startPage >= 1 ? Math.floor(startPage) : 1
+    const parsed = await queryProvider.value.parse(text, firstPage)
     if (ticket !== phraseId) return
     intent.value = parsed
-    page.value = 1
+    page.value = firstPage
 
     if (!parsed.title && !provider.value.capabilities.genreFilter) {
       abortInFlight()
