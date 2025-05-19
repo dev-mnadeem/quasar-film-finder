@@ -88,10 +88,6 @@ function useExample(example: string): void {
   submitNow()
 }
 
-function retry(): void {
-  void store.search(phrase.value)
-}
-
 const showIdleHint = computed(() => status.value === 'idle' && movies.value.length === 0)
 const showEmpty = computed(() => status.value === 'success' && movies.value.length === 0)
 const firstIndex = computed(() => (page.value - 1) * store.perPage + 1)
@@ -186,7 +182,7 @@ const lastIndex = computed(() => Math.min(page.value * store.perPage, total.valu
       <template #avatar><QIcon name="error_outline" color="white" /></template>
       {{ errorMessage }}
       <template #action>
-        <QBtn flat dense no-caps color="white" label="Retry" @click="retry" />
+        <QBtn flat dense no-caps color="white" label="Retry" @click="store.retry()" />
       </template>
     </QBanner>
 

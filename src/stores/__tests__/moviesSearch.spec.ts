@@ -233,6 +233,63 @@ describe('useMoviesSearchStore', () => {
     expect(store.movies.map((m) => m.title)).toEqual(['Fresh'])
   })
 
+  it('drops a slow phrase parse that a newer phrase has already superseded', async () => {
+    const search = vi.fn<SearchFn>(async (query) => pageOf([query.title]))
+    const slowParse = deferred<void>()
+    const store = useMoviesSearchStore()
+    store.useSource(stubProvider(search))
+    store.useQueryUnderstanding({
+      id: 'remote',
+      label: 'stub',
+      parse: async (phrase, page) => {
+        if (phrase === 'old') await slowParse.promise
+        return {
+          title: phrase,
+          page,
+          yearFrom: null,
+          yearTo: null,
+          genres: [],
+          source: 'remote',
+          explanation: phrase,
+        }
+      },
+    })
+
+    const first = store.search('old')
+    await store.search('new')
+    slowParse.resolve()
+    await first
+    await flushPromises()
+
+    expect(search).toHaveBeenCalledTimes(1)
+    expect(store.phrase).toBe('new')
+    expect(store.intent?.title).toBe('new')
+    expect(store.movies.map((m) => m.title)).toEqual(['new'])
+  })
+
+  it('retries the page that failed rather than going back to page 1', async () => {
+    let failPageTwo = true
+    const search = vi.fn<SearchFn>(async (query) => {
+      if (query.page === 2 && failPageTwo) {
+        failPageTwo = false
+        throw new MoviesApiError('Movie search failed (503 Unavailable)', 503)
+      }
+      return pageOf([`Page ${query.page}`], { page: query.page, total: 11, totalPages: 2 })
+    })
+    const store = useMoviesSearchStore()
+    store.useSource(stubProvider(search))
+
+    await store.search('the')
+    await store.setPage(2)
+    expect(store.status).toBe('error')
+
+    await store.retry()
+
+    expect(search.mock.lastCall?.[0]?.page).toBe(2)
+    expect(store.page).toBe(2)
+    expect(store.movies.map((m) => m.title)).toEqual(['Page 2'])
+  })
+
   it('reset returns the store to its initial state', async () => {
     const store = useMoviesSearchStore()
     store.useSource(stubProvider(async () => pageOf(['Alpha'])))

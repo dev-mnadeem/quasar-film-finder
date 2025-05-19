@@ -22,6 +22,8 @@ const GENERIC_ERROR = 'Something went wrong while loading movies.'
  *    ticket is still the current one. Aborting alone is not enough: a request whose
  *    `fetch` already resolved cannot be cancelled, so a slow failure from an
  *    abandoned keystroke could otherwise blank out the results of a newer one.
+ *    Parsing takes a ticket of its own (`phraseId`): a remote parser can answer
+ *    out of order, and a stale parse must not replace the newer phrase's intent.
  * 2. **Filters the source cannot honour are reported, not silently dropped.**
  */
 export const useMoviesSearchStore = defineStore('moviesSearch', () => {
@@ -40,6 +42,7 @@ export const useMoviesSearchStore = defineStore('moviesSearch', () => {
 
   let abortController: AbortController | null = null
   let requestId = 0
+  let phraseId = 0
 
   const isLoading = computed(() => status.value === 'loading')
   const sourceLabel = computed(() => provider.value.label)
@@ -80,6 +83,7 @@ export const useMoviesSearchStore = defineStore('moviesSearch', () => {
   function clear(): void {
     abortInFlight()
     requestId += 1
+    phraseId += 1
     phrase.value = ''
     intent.value = null
     page.value = 1
@@ -132,6 +136,7 @@ export const useMoviesSearchStore = defineStore('moviesSearch', () => {
   /** Parse a raw phrase, then fetch its first page. */
   async function search(rawPhrase: string): Promise<void> {
     const text = rawPhrase.trim()
+    const ticket = (phraseId += 1)
     phrase.value = text
     if (!text) {
       clear()
@@ -139,6 +144,7 @@ export const useMoviesSearchStore = defineStore('moviesSearch', () => {
     }
 
     const parsed = await queryProvider.value.parse(text, 1)
+    if (ticket !== phraseId) return
     intent.value = parsed
     page.value = 1
 
@@ -161,6 +167,13 @@ export const useMoviesSearchStore = defineStore('moviesSearch', () => {
     if (target === page.value) return
     page.value = target
     await run({ ...current, page: target })
+  }
+
+  /** Re-run the failed request for the page the user was on, not page 1. */
+  async function retry(): Promise<void> {
+    const current = intent.value
+    if (!current) return
+    await run({ ...current, page: page.value })
   }
 
   function reset(): void {
@@ -193,6 +206,7 @@ export const useMoviesSearchStore = defineStore('moviesSearch', () => {
     needsTitle,
     search,
     setPage,
+    retry,
     reset,
     useSource,
     useQueryUnderstanding,
