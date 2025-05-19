@@ -23,7 +23,12 @@ const ratingLabel = computed(() =>
       <h3 class="movie-card__title" data-testid="movie-card-title">{{ movie.title }}</h3>
       <div class="movie-card__meta">
         <span data-testid="movie-card-year">{{ movie.year }}</span>
-        <span v-if="ratingLabel" class="movie-card__rating" data-testid="movie-card-rating">
+        <span
+          v-if="ratingLabel"
+          class="movie-card__rating"
+          data-testid="movie-card-rating"
+          :aria-label="`Rated ${ratingLabel} out of 10`"
+        >
           ★ {{ ratingLabel }}
         </span>
       </div>
@@ -49,13 +54,22 @@ const ratingLabel = computed(() =>
 
   &:hover,
   &:focus-visible {
-    background: rgba(25, 118, 210, 0.08);
+    background: var(--ff-marquee-soft);
     transform: translateY(-2px);
   }
 
   &:focus-visible {
-    outline: 2px solid #1976d2;
+    outline: 2px solid var(--ff-marquee);
     outline-offset: 2px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    transition: none;
+
+    &:hover,
+    &:focus-visible {
+      transform: none;
+    }
   }
 }
 
@@ -66,7 +80,7 @@ const ratingLabel = computed(() =>
 }
 
 .movie-card__title {
-  font-size: 0.98rem;
+  font-size: 1.05rem;
   font-weight: 600;
   line-height: 1.3;
   margin: 0;
@@ -79,13 +93,13 @@ const ratingLabel = computed(() =>
   align-items: center;
   justify-content: space-between;
   gap: 8px;
-  font-size: 0.82rem;
-  color: rgba(0, 0, 0, 0.6);
+  font-size: 0.85rem;
+  color: var(--ff-ink-muted);
 }
 
 .movie-card__rating {
   font-weight: 600;
-  color: #b26a00;
+  color: var(--ff-brass);
 }
 
 .movie-card__genres {
@@ -93,6 +107,6 @@ const ratingLabel = computed(() =>
   font-size: 0.74rem;
   letter-spacing: 0.4px;
   text-transform: uppercase;
-  color: rgba(0, 0, 0, 0.45);
+  color: var(--ff-ink-muted);
 }
 </style>

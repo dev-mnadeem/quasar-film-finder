@@ -32,14 +32,14 @@ withDefaults(defineProps<{ count?: number }>(), { count: SKELETON_CARD_COUNT })
   width: 100%;
   aspect-ratio: 2 / 3;
   border-radius: 10px;
-  background: rgba(0, 0, 0, 0.07);
+  background: var(--ff-rule);
 }
 
 .skeleton__line {
   height: 10px;
   border-radius: 5px;
   width: 55%;
-  background: rgba(0, 0, 0, 0.07);
+  background: var(--ff-rule);
 }
 
 .skeleton__line--wide {

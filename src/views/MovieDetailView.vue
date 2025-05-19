@@ -63,7 +63,7 @@ function backTarget() {
 <template>
   <div class="detail">
     <RouterLink class="detail__back" :to="backTarget()" data-testid="detail-back">
-      <QIcon name="arrow_back" size="18px" />
+      <QIcon name="arrow_back" size="18px" aria-hidden="true" />
       Back to results
     </RouterLink>
 
@@ -83,7 +83,11 @@ function backTarget() {
           <div class="detail__meta" data-testid="detail-meta">
             <span>{{ movie.year }}</span>
             <span v-if="movie.runtimeMinutes !== null">{{ movie.runtimeMinutes }} min</span>
-            <span v-if="movie.rating !== null" class="detail__rating">
+            <span
+              v-if="movie.rating !== null"
+              class="detail__rating"
+              :aria-label="`Rated ${movie.rating.toFixed(1)} out of 10`"
+            >
               &#9733; {{ movie.rating.toFixed(1) }}
             </span>
           </div>
@@ -110,7 +114,8 @@ function backTarget() {
     <QBanner
       v-else-if="state === 'loading'"
       rounded
-      class="detail__notice"
+      role="status"
+      class="ff-notice ff-notice--quiet"
       data-testid="detail-loading"
     >
       Loading movie&hellip;
@@ -119,10 +124,11 @@ function backTarget() {
     <QBanner
       v-else-if="state === 'unsupported'"
       rounded
-      class="bg-amber-2 text-brown-9 detail__notice"
+      role="status"
+      class="ff-notice"
       data-testid="detail-unsupported"
     >
-      <template #avatar><QIcon name="info" color="brown-9" /></template>
+      <template #avatar><QIcon name="info" aria-hidden="true" /></template>
       {{ store.sourceLabel }} has no detail endpoint, so there is nothing to show for this title.
       Switch to the bundled catalogue to see full records.
     </QBanner>
@@ -130,10 +136,11 @@ function backTarget() {
     <QBanner
       v-else-if="state === 'missing'"
       rounded
-      class="bg-grey-3 detail__notice"
+      role="status"
+      class="ff-notice ff-notice--quiet"
       data-testid="detail-missing"
     >
-      <template #avatar><QIcon name="search_off" /></template>
+      <template #avatar><QIcon name="search_off" aria-hidden="true" /></template>
       No movie with that id is in {{ store.sourceLabel }}.
       <template #action>
         <QBtn flat dense no-caps color="primary" label="Back to search" :to="backTarget()" />
@@ -143,10 +150,11 @@ function backTarget() {
     <QBanner
       v-else
       rounded
-      class="bg-negative text-white detail__notice"
+      role="alert"
+      class="ff-notice ff-notice--error"
       data-testid="detail-error"
     >
-      <template #avatar><QIcon name="error_outline" color="white" /></template>
+      <template #avatar><QIcon name="error_outline" aria-hidden="true" /></template>
       {{ errorMessage }}
     </QBanner>
   </div>
@@ -167,8 +175,9 @@ function backTarget() {
   gap: 6px;
   align-self: flex-start;
   text-decoration: none;
-  font-size: 0.88rem;
-  color: #1976d2;
+  font-size: 0.92rem;
+  font-weight: 500;
+  color: var(--ff-marquee);
 
   &:hover {
     text-decoration: underline;
@@ -176,7 +185,9 @@ function backTarget() {
 }
 
 .detail__card {
-  border-radius: 14px;
+  border-radius: 10px;
+  border-color: var(--ff-rule);
+  background: var(--ff-surface);
   overflow: hidden;
   max-width: 860px;
 }
@@ -193,6 +204,10 @@ function backTarget() {
 
 .detail__poster {
   padding: 16px;
+
+  @media (max-width: 720px) {
+    width: min(100%, 280px);
+  }
 }
 
 .detail__body {
@@ -202,22 +217,22 @@ function backTarget() {
 }
 
 .detail__title {
-  font-size: 1.9rem;
-  line-height: 1.15;
+  font-size: clamp(1.7rem, 4vw, 2.4rem);
+  line-height: 1.1;
   margin: 0;
-  font-weight: 700;
+  font-weight: 600;
 }
 
 .detail__meta {
   display: flex;
   gap: 16px;
-  font-size: 0.9rem;
-  color: rgba(0, 0, 0, 0.6);
+  font-size: 0.95rem;
+  color: var(--ff-ink-muted);
 }
 
 .detail__rating {
   font-weight: 600;
-  color: #b26a00;
+  color: var(--ff-brass);
 }
 
 .detail__genres {
@@ -228,18 +243,14 @@ function backTarget() {
 
 .detail__overview {
   margin: 0;
-  font-size: 1rem;
-  line-height: 1.6;
+  font-size: 1.05rem;
+  line-height: 1.65;
   max-width: 62ch;
 }
 
 .detail__id {
   margin: 0;
-  font-size: 0.78rem;
-  color: rgba(0, 0, 0, 0.45);
-}
-
-.detail__notice {
-  border-radius: 12px;
+  font-size: 0.8rem;
+  color: var(--ff-ink-muted);
 }
 </style>

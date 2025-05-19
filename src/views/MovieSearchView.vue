@@ -21,7 +21,7 @@ import { useDebouncedWatch } from '@/composables/useDebouncedWatch'
 import { MAX_PAGINATION_LINKS } from '@/config/appConfig'
 import { useMoviesSearchStore } from '@/stores/moviesSearch'
 
-/** Phrases that show off the parser without the reviewer having to guess at it. */
+/** Starter phrases, so a first-time visitor sees what the parser understands. */
 const EXAMPLE_PHRASES = ['night', 'sci-fi from the 90s', 'documentary', '2016 comedy'] as const
 
 const route = useRoute()
@@ -98,6 +98,7 @@ const lastIndex = computed(() => Math.min(page.value * store.perPage, total.valu
 
 <template>
   <div class="search">
+    <h1 class="sr-only">Search films</h1>
     <QCard flat bordered class="search__panel">
       <QCardSection>
         <QInput
@@ -146,7 +147,6 @@ const lastIndex = computed(() => Math.min(page.value * store.perPage, total.valu
             clickable
             outline
             color="primary"
-            size="sm"
             :label="example"
             @click="useExample(example)"
           />
@@ -157,10 +157,11 @@ const lastIndex = computed(() => Math.min(page.value * store.perPage, total.valu
     <QBanner
       v-if="store.ignoredFilters.length > 0"
       rounded
-      class="bg-amber-2 text-brown-9 search__notice"
+      role="status"
+      class="ff-notice"
       data-testid="movie-ignored-filters"
     >
-      <template #avatar><QIcon name="info" color="brown-9" /></template>
+      <template #avatar><QIcon name="info" aria-hidden="true" /></template>
       {{ store.sourceLabel }} searches by title only, so the
       {{ store.ignoredFilters.join(' and ') }} filter was not applied.
     </QBanner>
@@ -168,20 +169,22 @@ const lastIndex = computed(() => Math.min(page.value * store.perPage, total.valu
     <QBanner
       v-if="store.needsTitle"
       rounded
-      class="bg-amber-2 text-brown-9 search__notice"
+      role="status"
+      class="ff-notice"
       data-testid="movie-needs-title"
     >
-      <template #avatar><QIcon name="info" color="brown-9" /></template>
+      <template #avatar><QIcon name="info" aria-hidden="true" /></template>
       {{ store.sourceLabel }} needs a title to search for - add a word from the film's name.
     </QBanner>
 
     <QBanner
       v-if="status === 'error'"
       rounded
-      class="bg-negative text-white search__notice"
+      role="alert"
+      class="ff-notice ff-notice--error"
       data-testid="movie-error"
     >
-      <template #avatar><QIcon name="error_outline" color="white" /></template>
+      <template #avatar><QIcon name="error_outline" aria-hidden="true" /></template>
       {{ errorMessage }}
       <template #action>
         <QBtn flat dense no-caps color="white" label="Retry" @click="store.retry()" />
@@ -194,6 +197,7 @@ const lastIndex = computed(() => Math.min(page.value * store.perPage, total.valu
       :aria-busy="isLoading"
       aria-live="polite"
     >
+      <h2 class="sr-only">Results</h2>
       <div v-if="total > 0" class="search__summary" data-testid="movie-total">
         <strong>{{ total }}</strong> result{{ total === 1 ? '' : 's' }}
         <span v-if="totalPages > 1">
@@ -245,7 +249,9 @@ const lastIndex = computed(() => Math.min(page.value * store.perPage, total.valu
 }
 
 .search__panel {
-  border-radius: 14px;
+  border-radius: 10px;
+  border-color: var(--ff-rule);
+  background: var(--ff-surface);
 }
 
 .search__actions {
@@ -257,8 +263,8 @@ const lastIndex = computed(() => Math.min(page.value * store.perPage, total.valu
 }
 
 .search__intent {
-  font-size: 0.82rem;
-  color: rgba(0, 0, 0, 0.6);
+  font-size: 0.88rem;
+  color: var(--ff-ink-muted);
 }
 
 .search__examples {
@@ -273,31 +279,30 @@ const lastIndex = computed(() => Math.min(page.value * store.perPage, total.valu
   font-size: 0.78rem;
   text-transform: uppercase;
   letter-spacing: 1px;
-  color: rgba(0, 0, 0, 0.45);
+  color: var(--ff-ink-muted);
   margin-right: 2px;
 }
 
-.search__notice {
-  border-radius: 12px;
-}
-
 .search__summary {
-  font-size: 0.84rem;
-  color: rgba(0, 0, 0, 0.6);
+  font-size: 0.88rem;
+  color: var(--ff-ink-muted);
   margin-bottom: 12px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--ff-rule);
 }
 
 .search__placeholder {
   margin: 28px 0;
-  font-size: 0.95rem;
-  color: rgba(0, 0, 0, 0.6);
+  font-size: 1rem;
+  color: var(--ff-ink-muted);
 }
 
 .search__placeholder-lead {
   margin: 0 0 4px;
-  font-size: 1.05rem;
+  font-family: var(--ff-font-display);
+  font-size: 1.3rem;
   font-weight: 600;
-  color: rgba(0, 0, 0, 0.75);
+  color: var(--ff-ink);
 }
 
 .search__placeholder-hint {

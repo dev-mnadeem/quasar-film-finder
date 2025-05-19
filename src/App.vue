@@ -8,22 +8,21 @@ const store = useMoviesSearchStore()
 </script>
 
 <template>
+  <a class="skip-link" href="#main">Skip to content</a>
   <QLayout view="hHh lpR fFf">
-    <QHeader elevated class="app-header">
+    <QHeader class="app-header">
       <QToolbar class="app-header__bar">
         <QToolbarTitle class="app-header__title">
           <RouterLink class="app-header__link" :to="{ name: 'movie-search' }">
             Film Finder
           </RouterLink>
         </QToolbarTitle>
-        <span class="app-header__source" data-testid="app-source">
-          {{ store.sourceLabel }}
-        </span>
+        <span class="app-header__source" data-testid="app-source">{{ store.sourceLabel }}</span>
       </QToolbar>
     </QHeader>
 
     <QPageContainer>
-      <QPage padding>
+      <QPage id="main" padding tabindex="-1" class="app-main">
         <RouterView />
       </QPage>
     </QPageContainer>
@@ -31,9 +30,30 @@ const store = useMoviesSearchStore()
 </template>
 
 <style scoped lang="scss">
+.skip-link {
+  position: absolute;
+  left: 12px;
+  top: -48px;
+  z-index: 3000;
+  padding: 8px 14px;
+  border-radius: 6px;
+  background: var(--ff-surface);
+  color: var(--ff-marquee);
+  font-weight: 600;
+
+  &:focus {
+    top: 8px;
+  }
+}
+
 .app-header {
-  background: linear-gradient(90deg, #14213d 0%, #1f4068 100%);
+  background: var(--ff-ink);
   color: #fff;
+  border-bottom: 3px solid var(--ff-marquee);
+}
+
+.app-main:focus {
+  outline: none;
 }
 
 .app-header__bar {
@@ -43,8 +63,9 @@ const store = useMoviesSearchStore()
 }
 
 .app-header__title {
-  font-weight: 700;
-  letter-spacing: 0.4px;
+  font-family: var(--ff-font-display);
+  font-size: 1.45rem;
+  font-weight: 600;
 }
 
 .app-header__link {
@@ -53,9 +74,13 @@ const store = useMoviesSearchStore()
 }
 
 .app-header__source {
-  font-size: 0.76rem;
+  flex: none;
+  padding: 3px 10px;
+  border: 1px dashed rgba(255, 255, 255, 0.55);
+  border-radius: 4px;
+  font-size: 0.72rem;
   letter-spacing: 1px;
   text-transform: uppercase;
-  opacity: 0.75;
+  color: #f4eee3;
 }
 </style>

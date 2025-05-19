@@ -6,7 +6,7 @@ const route = useRoute()
 
 <template>
   <div class="not-found" data-testid="not-found">
-    <p class="not-found__code">404</p>
+    <p class="not-found__code" aria-hidden="true">404</p>
     <h1 class="not-found__title">No such page</h1>
     <p class="not-found__path">
       <code>{{ route.fullPath }}</code> is not a route in this app.
@@ -29,24 +29,25 @@ const route = useRoute()
 
 .not-found__code {
   margin: 0;
-  font-size: 4rem;
-  font-weight: 700;
+  font-family: var(--ff-font-display);
+  font-size: 4.5rem;
+  font-weight: 600;
   line-height: 1;
-  color: rgba(0, 0, 0, 0.16);
+  color: var(--ff-rule);
 }
 
 .not-found__title {
   margin: 0;
-  font-size: 1.5rem;
+  font-size: 1.7rem;
 }
 
 .not-found__path {
   margin: 0;
-  color: rgba(0, 0, 0, 0.6);
+  color: var(--ff-ink-muted);
   word-break: break-all;
 }
 
 .not-found__link {
-  color: #1976d2;
+  font-weight: 500;
 }
 </style>

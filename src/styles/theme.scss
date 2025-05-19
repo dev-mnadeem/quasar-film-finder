@@ -1,0 +1,69 @@
+// Repertory-cinema palette: programme-paper background, projection-booth ink,
+// marquee red for actions and brass for ratings. Every text pairing below clears
+// WCAG AA (4.5:1) against the surface it sits on.
+:root {
+  --ff-paper: #f4eee3;
+  --ff-surface: #fffbf4;
+  --ff-ink: #211c18;
+  --ff-ink-muted: #5c5148;
+  --ff-rule: #ded3c2;
+  --ff-marquee: #a3261b;
+  --ff-marquee-soft: rgba(163, 38, 27, 0.08);
+  --ff-brass: #7d5300;
+  --ff-notice-bg: #f8e9c4;
+  --ff-notice-ink: #4a3300;
+
+  --ff-font-display: 'Fraunces Variable', 'Iowan Old Style', Georgia, serif;
+  --ff-font-body: 'IBM Plex Sans', 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+}
+
+body {
+  background: var(--ff-paper);
+  color: var(--ff-ink);
+  font-family: var(--ff-font-body);
+}
+
+h1,
+h2,
+h3 {
+  font-family: var(--ff-font-display);
+  letter-spacing: normal;
+}
+
+a {
+  color: var(--ff-marquee);
+}
+
+:focus-visible {
+  outline: 2px solid var(--ff-marquee);
+  outline-offset: 2px;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.ff-notice {
+  border-radius: 10px;
+  background: var(--ff-notice-bg);
+  color: var(--ff-notice-ink);
+}
+
+.ff-notice--quiet {
+  background: var(--ff-surface);
+  color: var(--ff-ink);
+  border: 1px solid var(--ff-rule);
+}
+
+.ff-notice--error {
+  background: #8f1d14;
+  color: #fff;
+}

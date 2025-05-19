@@ -26,6 +26,15 @@ describe('App', () => {
     expect(wrapper.find('[data-testid="movie-idle-hint"]').exists()).toBe(true)
   })
 
+  it('offers a skip link to the main region and gives the search screen one h1', async () => {
+    const wrapper = await mountApp('/')
+
+    const skip = wrapper.find('a.skip-link')
+    expect(skip.attributes('href')).toBe('#main')
+    expect(wrapper.find('#main').exists()).toBe(true)
+    expect(wrapper.findAll('h1')).toHaveLength(1)
+  })
+
   it('names the active catalogue source in the header', async () => {
     const wrapper = await mountApp('/')
 
