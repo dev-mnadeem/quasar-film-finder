@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 900" width="600" height="900" role="img" aria-label="The Weight of Rain">
+  <defs>
+    <linearGradient id="g" x1="0" y1="0" x2="0.4" y2="1">
+      <stop offset="0" stop-color="#8a5a3c"/>
+      <stop offset="1" stop-color="#23201c"/>
+    </linearGradient>
+  </defs>
+  <rect width="600" height="900" fill="#23201c"/>
+  <rect width="600" height="900" fill="url(#g)"/>
+  <circle cx="470" cy="180" r="96" fill="#ffffff" opacity="0.10"/>
+  <circle cx="470" cy="180" r="150" fill="none" stroke="#ffffff" stroke-opacity="0.14" stroke-width="2"/>
+  <rect x="0" y="700" width="600" height="200" fill="#000000" opacity="0.22"/>
+  <g font-family="Helvetica Neue, Helvetica, Arial, sans-serif" fill="#ffffff">
+    <text x="56" y="96" font-size="26" letter-spacing="6" opacity="0.72">DRAMA</text>
+    <text font-size="62" font-weight="700"><tspan x="56" y="477">The Weight of</tspan><tspan x="56" y="549">Rain</tspan></text>
+    <text x="56" y="784" font-size="40" opacity="0.88">1993</text>
+    <text x="56" y="836" font-size="26" opacity="0.66" letter-spacing="3">DRAMA</text>
+  </g>
+</svg>
