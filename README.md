@@ -253,3 +253,7 @@ The current Quasar patch is verified by 78 unit tests and 16 Chromium browser
 checks, including search, pagination, movie details and the HTTP catalogue adapter.
 The HTTP adapter tests intercept requests locally; they do not rely on an external
 catalogue staying online. GitHub runs the same checks on Node.js 22.
+
+## Author
+
+[**Muhammad Nadeem**](https://github.com/dev-mnadeem)
