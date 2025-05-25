@@ -248,3 +248,8 @@ off on the machine this was last worked on, so treat the Dockerfile as reviewed,
   by source, and tripling them again by browser buys little here.
 - **The remote phrase parser has no reference server.** Its client, validation and fallback are
   tested against a stubbed `fetch`, but no endpoint implementation ships here.
+
+The current Quasar patch is verified by 78 unit tests and 16 Chromium browser
+checks, including search, pagination, movie details and the HTTP catalogue adapter.
+The HTTP adapter tests intercept requests locally; they do not rely on an external
+catalogue staying online. GitHub runs the same checks on Node.js 22.

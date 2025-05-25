@@ -1,4 +1,4 @@
-import { describe, it, expect } from 'vitest'
+import { describe, it, expect, beforeAll, afterAll, vi } from 'vitest'
 import { mount, flushPromises } from '@vue/test-utils'
 import { Quasar } from 'quasar'
 import { createPinia } from 'pinia'
@@ -6,6 +6,16 @@ import { createMemoryHistory, createRouter } from 'vue-router'
 
 import App from '../App.vue'
 import { routes } from '@/router'
+
+// jsdom has no layout observer. Browser specs exercise the actual Quasar layout.
+beforeAll(() => {
+  vi.stubGlobal('ResizeObserver', class {
+    observe() {}
+    unobserve() {}
+    disconnect() {}
+  })
+})
+afterAll(() => vi.unstubAllGlobals())
 
 async function mountApp(initialPath = '/') {
   const pinia = createPinia()
